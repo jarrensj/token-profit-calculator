@@ -11,6 +11,7 @@ export default function Component() {
   const [desiredSol, setDesiredSol] = useState<number | "">("");
   const [tokensToSell, setTokensToSell] = useState<number | null>(null);
   const [pricePerToken, setPricePerToken] = useState<number | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (typeof totalTokens === "number" && typeof totalSol === "number" && totalTokens > 0) {
@@ -31,6 +32,14 @@ export default function Component() {
   const handleInputChange = (setter: React.Dispatch<React.SetStateAction<number | "">>) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value === "" ? "" : Number(e.target.value);
     setter(value);
+  };
+
+  const handleCopyToClipboard = () => {
+    if (tokensToSell !== null) {
+      navigator.clipboard.writeText(tokensToSell.toFixed(2));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -79,8 +88,18 @@ export default function Component() {
             </div>
           )}
           {tokensToSell !== null && (
-            <div className="text-lg font-semibold">
-              Tokens to sell: {tokensToSell.toFixed(2)}
+            <div className="flex items-center bg-gray-100 p-4 rounded-md shadow-sm">
+              <span className="text-xs font-semibold text-gray-800 break-all">
+                Tokens to sell: <span className="text-sm text-gray-600">{tokensToSell.toFixed(2)}</span>
+              </span>
+              <button
+                className={`ml-2 px-2 py-1 text-xs rounded-md text-white font-medium transition-colors duration-300 ${
+                  copied ? "bg-green-500 hover:bg-green-600" : "bg-blue-600 hover:bg-blue-700"
+                }`}
+                onClick={handleCopyToClipboard}
+              >
+                {copied ? "Copied!" : "Copy"}
+              </button>
             </div>
           )}
           <div className="pt-4 text-xs text-gray-500">
