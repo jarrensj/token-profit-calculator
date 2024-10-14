@@ -84,7 +84,7 @@ export default function Component() {
           </div>
           {pricePerToken !== null && (
             <div className="text-sm text-gray-600">
-              Price per token: {pricePerToken.toFixed(6)} SOL
+              Price per token: {pricePerToken.toFixed(16)} SOL
             </div>
           )}
           {tokensToSell !== null && (
